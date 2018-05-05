@@ -32,6 +32,10 @@
     "serve": "browser-sync start --server --files 'dist/css/*.css, dist/js/*.js'",
     "build:css": "npm run scss && npm run autoprefixer",
     "build:js": "npm run lint && npm run uglify",
-    "build:all": "npm run build:css && npm run build:js"
+    "build:all": "npm run build:css && npm run build:js",
+    "watch:css": "onchange 'src/css/*.scss' -- npm run build:css",
+    "watch:js": "onchange 'src/js/*.js' -- npm run build:js",
+    "watch:all": "parallelshell 'npm run serve' 'npm run watch:css' 'npm run watch:js'"
+
   }
 }
