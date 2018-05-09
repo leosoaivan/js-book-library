@@ -5,6 +5,11 @@ module.exports = {
     "extends": "google",
     "rules": {
         "require-jsdoc": "warn",
-        "valid-jsdoc": "warn"
+        "valid-jsdoc": "warn",
+        "no-trailing-spaces": ["error", 
+            {
+                "skipBlankLines": true
+            }
+        ]
     }
 };
