@@ -39,17 +39,37 @@ function render() {
   for (let i = 0; i < myLibrary.length; i++) {
     let book = myLibrary[i];
     let row = tableBooks.insertRow(0);
-    let cellTitle = row.insertCell(0);
-    let cellAuthor = row.insertCell(1);
-    let cellPages = row.insertCell(2);
-    let cellRead = row.insertCell(3);
+
+    let deleteButton = document.createElement('button');
+    deleteButton.innerText = 'Delete book';
+    deleteButton.classList.add('delete-button');
+
+    let cellTitle = row.insertCell(-1);
+    let cellAuthor = row.insertCell(-1);
+    let cellPages = row.insertCell(-1);
+    let cellRead = row.insertCell(-1);
+    let cellDelete = row.insertCell(-1);
 
     cellTitle.innerHTML = book.title;
     cellAuthor.innerHTML = book.author;
     cellPages.innerHTML = book.pages;
     cellRead.innerHTML = book.read;
+    cellDelete.appendChild(deleteButton);
   }
 }
+
+/**
+ * Event listeners for delete buttons
+ */
+let deleteButtons = Array.from(document.querySelectorAll('.delete-button'));
+
+deleteButtons.forEach((button) => {
+  button.addEventListener('click', (e) => {
+    let rowToDelete = e.target.parentElement.parentElement;
+    let rowParent = rowToDelete.parentElement;
+    rowParent.removeChild(rowToDelete);
+  });
+});
 
 /**
  * A function to toggle the addBook form
