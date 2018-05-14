@@ -143,9 +143,7 @@ let createBookButton = document.getElementById('add-book-form__submit');
 createBookButton.onclick = function() {
   let newBookTitle = this.form[0].value;
   
-  if (!newBookTitle) {
-    alert('You must enter a Title');
-  } else if (newBookTitle.trim().length === 0) {
+  if (!newBookTitle || newBookTitle.trim().length === 0) {
     alert('You must enter a Title');
   } else {
     addBookToLibrary();
