@@ -1,4 +1,23 @@
 /**
+ * Classes
+ */
+function Book(title, author, pages, read) {
+  this.title = title;
+  this.author = author;
+  this.pages = pages;
+  this.read = read;
+  this.toggleRead = function() {
+    return this.read = !this.read;
+  };
+};
+
+function Button(type, btnText, btnClass) {
+  this.type = type;
+  this.btnText = btnText;
+  this.btnClass = btnClass;
+};
+
+/**
  * Variables
  */
 let myLibrary = [];
@@ -23,30 +42,12 @@ const addBookSection = document.getElementById('add-book');
 myLibrary.push(book1, book2, book3, book4);
 allButtons.push(toggleButton, deleteButton);
 
-render();
-
-/**
- * Classes
- */
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.toggleRead = function() {
-    return this.read = !this.read;
-  };
-};
-
-function Button(type, btnText, btnClass) {
-  this.type = type;
-  this.btnText = btnText;
-  this.btnClass = btnClass;
-};
-
 /**
  * Function to output myLibrary to view.
  */
+
+render();
+
 function render() {
   tableBooks.innerHTML = '';
 
@@ -74,6 +75,10 @@ function createCells(index, row) {
   }
 };
 
+/**
+ * Functions related to buttons
+ */
+
 function addButton(currentCell, type) {
   buttonTemplate = allButtons.find((button) => button.type === type );
   newButton = buildButton(buttonTemplate);
@@ -98,9 +103,6 @@ function buildButton(template) {
   return button;
 };
 
-/**
- * Event listeners
- */
 function toggleRead(button) {
   let targetRow = button.parentElement.parentElement;
   let indexOfBookToEdit = targetRow.dataset.bookIndex;
@@ -119,12 +121,18 @@ function deleteBook(button) {
 }
 
 /**
- * A function to toggle the addBook form
+ * Functions to toggle the addBook form
  */
 let showFormButton = document.getElementById('show-book__button');
+let cancelBookButton = document.querySelector('#add-book-form__cancel');
 
 showFormButton.onclick = function() {
   showAddBookSection();
+};
+
+cancelBookButton.onclick = function() {
+  resetForm();
+  hideAddBookSection();
 };
 
 function showAddBookSection() {
@@ -139,7 +147,6 @@ function hideAddBookSection() {
  * Obtain book parameters from form
  */
 let createBookButton = document.querySelector('#add-book-form__submit');
-let cancelBookButton = document.querySelector('#add-book-form__cancel');
 
 createBookButton.onclick = function() {
   let newBookTitle = this.form[0].value;
@@ -152,11 +159,6 @@ createBookButton.onclick = function() {
     resetForm();
     render();
   }
-};
-
-cancelBookButton.onclick = function() {
-  resetForm();
-  hideAddBookSection();
 };
 
 function addBookToLibrary() {
