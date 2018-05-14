@@ -2,6 +2,8 @@
  * Variables
  */
 let myLibrary = [];
+let allButtons = [];
+
 let book1 = new Book(
   'The Fellowship of the Ring',
   'J. R. R. Tolkien',
@@ -9,67 +11,112 @@ let book1 = new Book(
   true
 );
 let book2 = new Book('The Two Towers', 'J. R. R. Tolkien', '415', true);
-let book3 = new Book('The Return of the Kind', 'J. R. R. Tolkien', '347', true);
+let book3 = new Book('The Return of the King', 'J. R. R. Tolkien', '347', true);
 let book4 = new Book('The Silmarillion', 'J. R. R. Tolkien', '365', false);
+
+let toggleButton = new Button('toggle', 'Already read it?', 'toggle-button');
+let deleteButton = new Button('delete', 'Delete this book', 'delete-button');
 
 const tableBooks = document.getElementById('table-books');
 const addBookSection = document.getElementById('add-book');
 
-
 myLibrary.push(book1, book2, book3, book4);
+allButtons.push(toggleButton, deleteButton);
 
 render();
 
 /**
- * A class constructor for books.
+ * Classes
  */
 function Book(title, author, pages, read) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
-}
+  this.toggleRead = function() {
+    return this.read = !this.read;
+  };
+};
+
+function Button(type, btnText, btnClass) {
+  this.type = type;
+  this.btnText = btnText;
+  this.btnClass = btnClass;
+};
 
 /**
- * A function to output myLibrary to view.
+ * Function to output myLibrary to view.
  */
 function render() {
   tableBooks.innerHTML = '';
 
   for (let i = 0; i < myLibrary.length; i++) {
-    let book = myLibrary[i];
     let row = tableBooks.insertRow(0);
+    row.setAttribute('data-book-index', i);
 
-    let deleteButton = document.createElement('button');
-    deleteButton.innerText = 'Delete book';
-    deleteButton.classList.add('delete-button');
-
-    let cellTitle = row.insertCell(-1);
-    let cellAuthor = row.insertCell(-1);
-    let cellPages = row.insertCell(-1);
-    let cellRead = row.insertCell(-1);
-    let cellDelete = row.insertCell(-1);
-
-    cellTitle.innerHTML = book.title;
-    cellAuthor.innerHTML = book.author;
-    cellPages.innerHTML = book.pages;
-    cellRead.innerHTML = book.read;
-    cellDelete.appendChild(deleteButton);
+    createCells(i, row);
   }
-}
+};
 
 /**
- * Event listeners for delete buttons
+ * Function to create cells
  */
-let deleteButtons = Array.from(document.querySelectorAll('.delete-button'));
+function createCells(index, row) {
+  let book = myLibrary[index];
+  
+  for (let property in book) {
+    if (book.hasOwnProperty(property) && typeof book[property] != 'function') {
+      row.insertCell(-1).innerText = book[property];
+    } else {
+      addButton(row.insertCell(-1), 'toggle');
+      addButton(row.insertCell(-1), 'delete');
+    }
+  }
+};
 
-deleteButtons.forEach((button) => {
-  button.addEventListener('click', (e) => {
-    let rowToDelete = e.target.parentElement.parentElement;
-    let rowParent = rowToDelete.parentElement;
-    rowParent.removeChild(rowToDelete);
+function addButton(currentCell, type) {
+  buttonTemplate = allButtons.find((button) => button.type === type );
+  newButton = buildButton(buttonTemplate);
+  currentCell.appendChild(newButton);
+};
+
+function buildButton(template) {
+  let button = document.createElement('button');
+  button.innerHTML = template.btnText;
+  button.classList.add(template.btnClass);
+
+  button.addEventListener('click', function() {
+    switch (template.type) {
+      case 'toggle':
+        toggleRead(button);
+        break;
+      case 'delete':
+        deleteBook(button);
+        break;
+    }
   });
-});
+  return button;
+};
+
+/**
+ * Event listeners
+ */
+function toggleRead(button) {
+  let targetRow = button.parentElement.parentElement;
+  let indexOfBookToEdit = targetRow.dataset.bookIndex;
+  let bookToEdit = myLibrary[indexOfBookToEdit];
+  
+  targetRow.innerHTML = '';
+  bookToEdit.read = !bookToEdit.read;
+
+  createCells(indexOfBookToEdit, targetRow);
+};
+
+function deleteBook(button) {
+  let targetRow = button.parentElement.parentElement;
+  let rowParent = targetRow.parentElement;
+  rowParent.removeChild(targetRow);
+}
 
 /**
  * A function to toggle the addBook form
