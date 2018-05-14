@@ -7,7 +7,7 @@ function Book(title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.toggleRead = function() {
-    return this.read = !this.read;
+    this.read = !this.read;
   };
 };
 
@@ -46,23 +46,23 @@ allButtons.push(toggleButton, deleteButton);
  * Function to output myLibrary to view.
  */
 
-render();
+renderLibrary();
 
-function render() {
+function renderLibrary() {
   tableBooks.innerHTML = '';
 
   for (let i = 0; i < myLibrary.length; i++) {
     let row = tableBooks.insertRow(0);
     row.setAttribute('data-book-index', i);
 
-    createCells(i, row);
+    fillRow(i, row);
   }
 };
 
 /**
- * Function to create cells
+ * Function to create cells and fill with data
  */
-function createCells(index, row) {
+function fillRow(index, row) {
   let book = myLibrary[index];
   
   for (let property in book) {
@@ -109,9 +109,9 @@ function toggleRead(button) {
   let bookToEdit = myLibrary[indexOfBookToEdit];
   
   targetRow.innerHTML = '';
-  bookToEdit.read = !bookToEdit.read;
+  bookToEdit.toggleRead();
 
-  createCells(indexOfBookToEdit, targetRow);
+  fillRow(indexOfBookToEdit, targetRow);
 };
 
 function deleteBook(button) {
