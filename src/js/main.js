@@ -138,7 +138,8 @@ function hideAddBookSection() {
 /**
  * Obtain book parameters from form
  */
-let createBookButton = document.getElementById('add-book-form__submit');
+let createBookButton = document.querySelector('#add-book-form__submit');
+let cancelBookButton = document.querySelector('#add-book-form__cancel');
 
 createBookButton.onclick = function() {
   let newBookTitle = this.form[0].value;
@@ -151,6 +152,11 @@ createBookButton.onclick = function() {
     resetForm();
     render();
   }
+};
+
+cancelBookButton.onclick = function() {
+  resetForm();
+  hideAddBookSection();
 };
 
 function addBookToLibrary() {
