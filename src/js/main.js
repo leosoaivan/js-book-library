@@ -71,6 +71,15 @@ function fillRow(index, row) {
     } else {
       addButton(row.insertCell(-1), 'toggle');
       addButton(row.insertCell(-1), 'delete');
+
+      deleteIcon = document.createElement('i');
+      deleteIcon.setAttribute('class', 'material-icons');
+      deleteIcon.innerText = 'delete';
+
+      console.log(deleteIcon);
+    
+      lastCell = row.insertCell(-1);
+      lastCell.appendChild(deleteIcon);
     }
   }
 };
