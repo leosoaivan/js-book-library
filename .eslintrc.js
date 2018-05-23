@@ -10,6 +10,7 @@ module.exports = {
             {
                 "skipBlankLines": true
             }
-        ]
+        ],
+        "max-len": "warn"
     }
 };

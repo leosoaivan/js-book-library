@@ -3,14 +3,25 @@
 }
 
 a.material-icons {
-  color: black;
   cursor: pointer;
 
-  &:hover {
-    color: orange;
+  &.check {
+    color: green;
   }
 
-  &:active {
+  &.clear {
     color: red;
+  }
+
+  &.delete {
+    color: black;
+
+    &:hover {
+      color: orange;
+    }
+  
+    &:active {
+      color: red;
+    }
   }
 }
