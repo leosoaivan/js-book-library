@@ -70,16 +70,7 @@ function fillRow(index, row) {
       row.insertCell(-1).innerText = book[property];
     } else {
       addButton(row.insertCell(-1), 'toggle');
-      addButton(row.insertCell(-1), 'delete');
-
-      deleteIcon = document.createElement('i');
-      deleteIcon.setAttribute('class', 'material-icons');
-      deleteIcon.innerText = 'delete';
-
-      console.log(deleteIcon);
-    
-      lastCell = row.insertCell(-1);
-      lastCell.appendChild(deleteIcon);
+      addIcon(row.insertCell(-1), 'delete');
     }
   }
 };
@@ -87,6 +78,22 @@ function fillRow(index, row) {
 /**
  * Functions related to buttons
  */
+
+function addIcon(currentCell, icon) {
+  newIcon = document.createElement('a');
+  newIcon.setAttribute('class', 'material-icons');
+  newIcon.innerHTML = icon;
+
+  currentCell.appendChild(newIcon);
+
+  newIcon.addEventListener('click', function() {
+    switch (icon) {
+      case 'delete':
+        deleteBook(newIcon);
+        break;
+    }
+  });
+};
 
 function addButton(currentCell, type) {
   buttonTemplate = allButtons.find((button) => button.type === type );
@@ -126,7 +133,9 @@ function toggleRead(button) {
 function deleteBook(button) {
   let targetRow = button.parentElement.parentElement;
   let rowParent = targetRow.parentElement;
-  rowParent.removeChild(targetRow);
+  if (confirm('Are you sure you want to delete this book?')) {
+    rowParent.removeChild(targetRow);
+  }
 }
 
 /**

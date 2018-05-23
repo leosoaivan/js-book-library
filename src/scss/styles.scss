@@ -1,3 +1,16 @@
 #add-book {
   display: none;
 }
+
+a.material-icons {
+  color: black;
+  cursor: pointer;
+
+  &:hover {
+    color: orange;
+  }
+
+  &:active {
+    color: red;
+  }
+}
