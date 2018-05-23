@@ -11,17 +11,10 @@ function Book(title, author, pages, read) {
   };
 };
 
-// function Button(type, btnText, btnClass) {
-//   this.type = type;
-//   this.btnText = btnText;
-//   this.btnClass = btnClass;
-// };
-
 /**
  * Variables
  */
 let myLibrary = [];
-let allButtons = [];
 
 let book1 = new Book(
   'The Fellowship of the Ring',
@@ -37,7 +30,6 @@ const tableBooks = document.getElementById('table-books');
 const addBookSection = document.getElementById('add-book');
 
 myLibrary.push(book1, book2, book3, book4);
-allButtons.push(toggleButton, deleteButton);
 
 /**
  * Function to output myLibrary to view.
@@ -64,7 +56,10 @@ function fillRow(index, row) {
   
   for (let property in book) {
     if (book.hasOwnProperty(property) && property == 'read') {
-      insertIcon(index, row.insertCell(-1), book[property]);
+      let newCell = row.insertCell(-1);
+      newCell.classList.add('read-column');
+
+      insertIcon(index, newCell, book[property]);
     } else if (book.hasOwnProperty(property) && typeof book[property] != 'function') {
       row.insertCell(-1).innerText = book[property];
     } else {
@@ -74,7 +69,7 @@ function fillRow(index, row) {
 };
 
 /**
- * Functions related to buttons
+ * Functions related to icons
  */
 
 function insertIcon(rowIndex, currentCell, type) {
@@ -82,47 +77,54 @@ function insertIcon(rowIndex, currentCell, type) {
   let newIcon = createIcon(rowIndex, iconType);
   
   currentCell.appendChild(newIcon);
+  defineIconAction(newIcon, iconType);
 };
 
 function createIcon(index, type) {
-  let icon = document.createElement('a');
-  icon.setAttribute('data-book-index-delete', index);
-  icon.classList.add('material-icons');
+  let iconElement = document.createElement('a');
+  iconElement.setAttribute('data-book-index-delete', index);
+  iconElement.classList.add('material-icons');
 
+  defineIconType(iconElement, type);
+
+  return iconElement;
+}
+
+function defineIconType(newIcon, type) {
   switch (type) {
     case 'delete':
-      icon.classList.add('delete');
-      icon.innerHTML = type;
+      newIcon.classList.add('delete');
+      newIcon.innerHTML = type;
       break;
     case 'true':
-      icon.classList.add('check');
-      icon.innerHTML = 'check';
+      newIcon.classList.add('check');
+      newIcon.innerHTML = 'check';
       break;
     case 'false':
-      icon.classList.add('clear');
-      icon.innerHTML = 'clear';
+      newIcon.classList.add('clear');
+      newIcon.innerHTML = 'clear';
       break;
   };
+}
 
-  icon.addEventListener('click', function() {
+function defineIconAction(newIcon, type) {
+  newIcon.addEventListener('click', function() {
     switch (type) {
       case 'delete':
-        deleteBook(icon);
+        deleteBook(newIcon);
         break;
       case 'true':
-        toggleRead(icon);
+        toggleRead(newIcon);
         break;
       case 'false':
-        toggleRead(icon);
+        toggleRead(newIcon);
         break;
     }
   });
-
-  return icon;
 }
 
-function toggleRead(button) {
-  let targetRow = button.parentElement.parentElement;
+function toggleRead(icon) {
+  let targetRow = icon.parentElement.parentElement;
   let indexOfBookToEdit = targetRow.dataset.bookIndex;
   let bookToEdit = myLibrary[indexOfBookToEdit];
   
@@ -132,8 +134,8 @@ function toggleRead(button) {
   fillRow(indexOfBookToEdit, targetRow);
 };
 
-function deleteBook(button) {
-  let targetRow = button.parentElement.parentElement;
+function deleteBook(icon) {
+  let targetRow = icon.parentElement.parentElement;
 
   let rowParent = targetRow.parentElement;
   if (confirm('Are you sure you want to delete this book?')) {
