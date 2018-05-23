@@ -34,32 +34,87 @@
     </div>
 
     <div class="row">
-      <div class="col s12 center-align">
-        <button id="show-book__button" class="waves-effect waves-light btn model-trigger">
-          Add a book
+      <div class="col s4 offset-s4">
+        <button id="show-book__button" class="btn modal-trigger" data-target="add-book">
+          <i class="material-icons right">
+              add
+          </i>
+          <span>
+            Add book
+          </span>
         </button>
       </div>
     </div>
   </div>
 
-
-  <div id="add-book">
-    <form id="add-book-form" name="form" onsubmit="return false">
+  <div id="add-book" class="modal">
+    <div class="modal-content">
       <h2>Add a book</h2>
-      <hr>
-      <input type="text" id="add-book-form__title" name="title" placeholder="Title" required>
-      <input type="text" id="add-book-form__author" name="author" placeholder="Author">
-      <input type="number" id="add-book-form__pages" name="pages" min="1" placeholder="# of pages">
-      <input type="checkbox" id="add-book-form__read" name="read" value="true">
-      <label for="read">Read it?</label>
-      <div>
-        <button id="add-book-form__submit" type="submit">Add this book</button>
-      </div>
-    </form>
-    <div>
-      <button id="add-book-form__cancel">Cancel</button>
-    </div>
-  </div>
+      <form id="add-book-form" name="form" onsubmit="return false">
+        <div class="row">
+          <div class="input-field col s6">
+            <input type="text" id="add-book-form__title" required>
+            <label for="add-book-form__title">Title</label>
+          </div>
+  
+          <div class="input-field col s6">
+            <input type="text" id="add-book-form__author">
+            <label for="add-book-form__author">Author</label>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="input-field col s6">
+            <input type="number" id="add-book-form__pages" min="1">
+            <label for="add-book-form__pages"># of pages</label>
+          </div>
+  
+          <div class="col s6">
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col s6">
+            <div id="read-it">
+              <label for="add-book-form__read">
+                <input type="checkbox" id="add-book-form__read" value="true">
+                <span>Read it?</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="modal-actions" class="row">
+          <div class="col s3 offset-s3">
+            <button id="add-book-form__submit" class="btn" type="submit">
+              <i class="material-icons right">
+                send
+              </i>
+              <span>
+                Add book
+              </span>
+            </button>
+          </div>
+      
+          <div class="col s3">
+            <button id="add-book-form__cancel" class="btn red modal-close">
+              <i class="material-icons right">
+                clear
+              </i>
+              <span>
+                Cancel
+              </span>
+          </div>
+        </div>
+      </form>
+    </div> <!-- .modal-content -->
+
+  </div> <!-- .modal -->
+
 </body>
+
 <script src="dist/js/app.js" type="text/javascript"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js">
+</script>
 </html>

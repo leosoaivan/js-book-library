@@ -1,5 +1,5 @@
-#add-book {
-  display: none;
+html, body {
+  height: 100%;
 }
 
 a.material-icons {
@@ -28,4 +28,17 @@ a.material-icons {
 
 .read-column {
   text-align: center;
+}
+
+.modal .col {
+  height: 100%;
+ 
+  #read-it{
+    height: 2em;
+  }
+
+}
+
+button {
+  width: 100%;
 }

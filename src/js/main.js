@@ -27,7 +27,7 @@ let book3 = new Book('The Return of the King', 'J. R. R. Tolkien', '347', true);
 let book4 = new Book('The Silmarillion', 'J. R. R. Tolkien', '365', false);
 
 const tableBooks = document.getElementById('table-books');
-const addBookSection = document.getElementById('add-book');
+// const addBookSection = document.getElementById('add-book');
 
 myLibrary.push(book1, book2, book3, book4);
 
@@ -146,25 +146,25 @@ function deleteBook(icon) {
 /**
  * Functions to toggle the addBook form
  */
-let showFormButton = document.getElementById('show-book__button');
-let cancelBookButton = document.querySelector('#add-book-form__cancel');
+// let showFormButton = document.getElementById('show-book__button');
+// let cancelBookButton = document.querySelector('#add-book-form__cancel');
 
-showFormButton.onclick = function() {
-  showAddBookSection();
-};
+// showFormButton.onclick = function() {
+//   showAddBookSection();
+// };
 
-cancelBookButton.onclick = function() {
-  resetForm();
-  hideAddBookSection();
-};
+// cancelBookButton.onclick = function() {
+//   resetForm();
+//   hideAddBookSection();
+// };
 
-function showAddBookSection() {
-  addBookSection.style.display = 'block';
-};
+// function showAddBookSection() {
+//   addBookSection.style.display = 'block';
+// };
 
-function hideAddBookSection() {
-  addBookSection.style.display = 'none';
-}
+// function hideAddBookSection() {
+//   addBookSection.style.display = 'none';
+// }
 
 /**
  * Obtain book parameters from form
