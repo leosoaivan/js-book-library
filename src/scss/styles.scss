@@ -1,5 +1,12 @@
-html, body {
-  height: 100%;
+body {
+  overflow: auto !important;
+}
+
+table {
+  th#table-col__books {
+    width: 50%;
+    overflow-wrap: break-word;
+  }
 }
 
 a.material-icons {
@@ -50,6 +57,5 @@ a.material-icons {
 }
 
 button {
-  overflow: wrap;
   width: 100%;
 }

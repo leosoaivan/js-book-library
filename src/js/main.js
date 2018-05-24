@@ -1,4 +1,20 @@
 /**
+ * Materialize modal functionality
+ */
+document.addEventListener('DOMContentLoaded', function() {
+  let bookForm = document.querySelector('#add-book-form');
+  let elems = document.querySelectorAll('.modal');
+  let options = {
+    dismissible: false,
+    onCloseEnd: function() {
+      bookForm.reset();
+    },
+  };
+
+  M.Modal.init(elems[0], options);
+});
+
+/**
  * Classes
  */
 function Book(title, author, pages, read) {
@@ -42,7 +58,6 @@ function renderLibrary() {
 
   for (let i = 0; i < myLibrary.length; i++) {
     let row = tableBooks.insertRow(-1);
-    row.setAttribute('data-book-index', i);
 
     fillRow(i, row);
   }
@@ -58,7 +73,6 @@ function fillRow(index, row) {
     if (book.hasOwnProperty(property) && property == 'read') {
       let newCell = row.insertCell(-1);
       newCell.classList.add('read-column');
-
       insertIcon(index, newCell, book[property]);
     } else if (book.hasOwnProperty(property) && typeof book[property] != 'function') {
       row.insertCell(-1).innerText = book[property];
@@ -71,7 +85,6 @@ function fillRow(index, row) {
 /**
  * Functions related to icons
  */
-
 function insertIcon(rowIndex, currentCell, type) {
   let iconType = type.toString();
   let newIcon = createIcon(rowIndex, iconType);
@@ -125,7 +138,9 @@ function defineIconAction(newIcon, type) {
 
 function toggleRead(icon) {
   let targetRow = icon.parentElement.parentElement;
-  let indexOfBookToEdit = targetRow.dataset.bookIndex;
+  let targetBookTitle = targetRow.firstChild.innerText;
+
+  let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
   let bookToEdit = myLibrary[indexOfBookToEdit];
   
   targetRow.innerHTML = '';
@@ -136,11 +151,25 @@ function toggleRead(icon) {
 
 function deleteBook(icon) {
   let targetRow = icon.parentElement.parentElement;
+  let targetBookTitle = targetRow.firstChild.innerText;
+
+  let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
 
   let rowParent = targetRow.parentElement;
   if (confirm('Are you sure you want to delete this book?')) {
     rowParent.removeChild(targetRow);
   }
+
+  myLibrary.splice(indexOfBookToEdit, 1);
+}
+
+function findBookByAttr(attr, value) {
+  for (let i = 0; i < myLibrary.length; i += 1) {
+    if (myLibrary[i][attr] === value) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 /**
@@ -159,6 +188,8 @@ function resetForm() {
 /**
  * Obtain book parameters from form
  */
+let modal = document.querySelector('.modal');
+let bookForm = document.querySelector('#add-book-form');
 let createBookButton = document.querySelector('#add-book-form__submit');
 
 createBookButton.onclick = function() {
@@ -168,9 +199,10 @@ createBookButton.onclick = function() {
     alert('You must enter a Title');
   } else {
     addBookToLibrary();
-    hideAddBookSection();
-    resetForm();
-    render();
+    let modalInstance = M.Modal.init(modal);
+    modalInstance.close();
+    bookForm.reset();
+    renderLibrary();
   }
 };
 
