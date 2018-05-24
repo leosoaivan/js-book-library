@@ -146,25 +146,15 @@ function deleteBook(icon) {
 /**
  * Functions to toggle the addBook form
  */
-// let showFormButton = document.getElementById('show-book__button');
-// let cancelBookButton = document.querySelector('#add-book-form__cancel');
+let cancelBookButton = document.querySelector('#add-book-form__cancel');
 
-// showFormButton.onclick = function() {
-//   showAddBookSection();
-// };
+cancelBookButton.onclick = function() {
+  resetForm();
+};
 
-// cancelBookButton.onclick = function() {
-//   resetForm();
-//   hideAddBookSection();
-// };
-
-// function showAddBookSection() {
-//   addBookSection.style.display = 'block';
-// };
-
-// function hideAddBookSection() {
-//   addBookSection.style.display = 'none';
-// }
+function resetForm() {
+  addBookForm = document.getElementById('add-book-form').reset();
+};
 
 /**
  * Obtain book parameters from form
@@ -198,8 +188,4 @@ function addBookToLibrary() {
   );
 
   myLibrary.push(newBook);
-};
-
-function resetForm() {
-  addBookForm = document.getElementById('add-book-form').reset();
 };

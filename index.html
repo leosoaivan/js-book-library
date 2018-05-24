@@ -34,14 +34,14 @@
     </div>
 
     <div class="row">
-      <div class="col s4 offset-s4">
+      <div class="col s12 m4 offset-m4">
         <button id="show-book__button" class="btn modal-trigger" data-target="add-book">
-          <i class="material-icons right">
-              add
-          </i>
           <span>
             Add book
           </span>
+          <i class="material-icons right">
+              add
+          </i>
         </button>
       </div>
     </div>
@@ -52,29 +52,29 @@
       <h2>Add a book</h2>
       <form id="add-book-form" name="form" onsubmit="return false">
         <div class="row">
-          <div class="input-field col s6">
-            <input type="text" id="add-book-form__title" required>
+          <div class="input-field col s12 m6">
+            <input type="text" id="add-book-form__title">
             <label for="add-book-form__title">Title</label>
           </div>
   
-          <div class="input-field col s6">
+          <div class="input-field col s12 m6">
             <input type="text" id="add-book-form__author">
             <label for="add-book-form__author">Author</label>
           </div>
         </div>
   
         <div class="row">
-          <div class="input-field col s6">
+          <div class="input-field col s12 m6">
             <input type="number" id="add-book-form__pages" min="1">
             <label for="add-book-form__pages"># of pages</label>
           </div>
   
-          <div class="col s6">
+          <div class="col s12 m6">
           </div>
         </div>
     
         <div class="row">
-          <div class="col s6">
+          <div class="col s12">
             <div id="read-it">
               <label for="add-book-form__read">
                 <input type="checkbox" id="add-book-form__read" value="true">
@@ -85,7 +85,7 @@
         </div>
 
         <div id="modal-actions" class="row">
-          <div class="col s3 offset-s3">
+          <div class="col s12 m4 offset-m2">
             <button id="add-book-form__submit" class="btn" type="submit">
               <i class="material-icons right">
                 send
@@ -96,7 +96,7 @@
             </button>
           </div>
       
-          <div class="col s3">
+          <div class="col s12 m4">
             <button id="add-book-form__cancel" class="btn red modal-close">
               <i class="material-icons right">
                 clear

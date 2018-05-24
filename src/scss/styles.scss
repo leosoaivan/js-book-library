@@ -30,8 +30,14 @@ a.material-icons {
   text-align: center;
 }
 
-.modal .col {
-  height: 100%;
+.modal {
+  div.row {
+    margin: 0;
+  }
+
+  .col {
+    height: 100%;
+  }
  
   #read-it{
     height: 2em;
@@ -39,6 +45,11 @@ a.material-icons {
 
 }
 
+#modal-actions button {
+  margin-top: 20px;
+}
+
 button {
+  overflow: wrap;
   width: 100%;
 }
