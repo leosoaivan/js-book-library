@@ -31,7 +31,6 @@ function Book(title, author, pages, read) {
  * Variables
  */
 let myLibrary = [];
-
 let book1 = new Book(
   'The Fellowship of the Ring',
   'J. R. R. Tolkien',
@@ -41,6 +40,7 @@ let book1 = new Book(
 let book2 = new Book('The Two Towers', 'J. R. R. Tolkien', '415', true);
 let book3 = new Book('The Return of the King', 'J. R. R. Tolkien', '347', true);
 let book4 = new Book('The Silmarillion', 'J. R. R. Tolkien', '365', false);
+let bookForm = document.querySelector('#add-book-form');
 
 const tableBooks = document.getElementById('table-books');
 // const addBookSection = document.getElementById('add-book');
@@ -155,12 +155,10 @@ function deleteBook(icon) {
 
   let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
 
-  let rowParent = targetRow.parentElement;
   if (confirm('Are you sure you want to delete this book?')) {
-    rowParent.removeChild(targetRow);
+    myLibrary.splice(indexOfBookToEdit, 1);
+    renderLibrary();
   }
-
-  myLibrary.splice(indexOfBookToEdit, 1);
 }
 
 function findBookByAttr(attr, value) {
@@ -178,18 +176,13 @@ function findBookByAttr(attr, value) {
 let cancelBookButton = document.querySelector('#add-book-form__cancel');
 
 cancelBookButton.onclick = function() {
-  resetForm();
-};
-
-function resetForm() {
-  addBookForm = document.getElementById('add-book-form').reset();
+  bookForm.reset();
 };
 
 /**
  * Obtain book parameters from form
  */
 let modal = document.querySelector('.modal');
-let bookForm = document.querySelector('#add-book-form');
 let createBookButton = document.querySelector('#add-book-form__submit');
 
 createBookButton.onclick = function() {
