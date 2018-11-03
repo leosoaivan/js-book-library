@@ -63,7 +63,7 @@ function renderLibrary() {
     let book = myLibrary[i];
     let row = tableBodyOfBooks.insertRow(-1);
     
-    fillRow(book, row);
+    fillRow(i, book, row);
   }
 };
 
@@ -71,24 +71,27 @@ renderLibrary();
 
 /**
  * Function to create a row
+ * @param {number} index - the books' index in myLibrary
  * @param {object} book - the book
  * @param {number} row - the table row HTML element
  */
-function fillRow(book, row) {
+function fillRow(index, book, row) {
   Object.keys(book).forEach((prop) => {
+    let cell = row.insertCell(-1);
+
     if (typeof prop == 'boolean') {
-      let cell = row.insertCell(-1);
       cell.classList.add('read-column');
       cell.innerText = book[prop];
     } else {
-      let cell = row.insertCell(-1);
       cell.innerText = book[prop];
     }
   });
 
   Object.getOwnPropertyNames(Book.prototype).forEach((prop) => {
+    let cell = row.insertCell(-1);
+
     if (prop != 'constructor') {
-      insertIcon(row, row.insertCell(-1), 'delete');
+      insertIcon(index, cell, 'delete');
     }
   });
 };
@@ -109,7 +112,7 @@ function insertIcon(rowIndex, currentCell, type) {
 
 /**
  * Function to create an icon
- * @param {number} index - the table's current row
+ * @param {number} index - the current
  * @param {string} type - the icon type
  * @return {HTML} - HMTL link element
  */
