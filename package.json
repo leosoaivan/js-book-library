@@ -5,11 +5,11 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^8.5.0",
-    "browser-sync": "^2.24.4",
+    "browser-sync": "^2.26.3",
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "materialize-css": "^0.100.2",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.4",
     "onchange": "^3.3.0",
     "parallelshell": "^3.0.2",
     "postcss-cli": "^5.0.0",
