@@ -11,6 +11,6 @@ module.exports = {
                 "skipBlankLines": true
             }
         ],
-        "max-len": "warn"
+        "max-len": "off"
     }
 };
