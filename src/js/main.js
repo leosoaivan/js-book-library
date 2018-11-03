@@ -79,9 +79,9 @@ function fillRow(index, book, row) {
   Object.keys(book).forEach((prop) => {
     let cell = row.insertCell(-1);
 
-    if (typeof prop == 'boolean') {
+    if (prop == 'read') {
       cell.classList.add('read-column');
-      cell.innerText = book[prop];
+      insertIcon(index, cell, book[prop]);
     } else {
       cell.innerText = book[prop];
     }
