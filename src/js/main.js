@@ -15,14 +15,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Classes
+ * Represents a book
  */
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.toggleRead = function() {
+class Book {
+  /**
+   * @param {string} title
+   * @param {string} author
+   * @param {number} pages
+   * @param {boolean} read
+   */
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
+
+  /**
+   * Toggles if a book has been read
+   */
+  toggleRead() {
     this.read = !this.read;
   };
 };
@@ -31,59 +43,61 @@ function Book(title, author, pages, read) {
  * Variables
  */
 let myLibrary = [];
-let book1 = new Book(
-  'The Fellowship of the Ring',
-  'J. R. R. Tolkien',
-  '479',
-  true
-);
+let book1 = new Book('The Fellowship of the Ring', 'J. R. R. Tolkien', '479', true);
 let book2 = new Book('The Two Towers', 'J. R. R. Tolkien', '415', true);
 let book3 = new Book('The Return of the King', 'J. R. R. Tolkien', '347', true);
 let book4 = new Book('The Silmarillion', 'J. R. R. Tolkien', '365', false);
 let bookForm = document.querySelector('#add-book-form');
 
-const tableBooks = document.getElementById('table-books');
-// const addBookSection = document.getElementById('add-book');
+const tableBodyOfBooks = document.getElementById('table-books');
 
 myLibrary.push(book1, book2, book3, book4);
 
 /**
  * Function to output myLibrary to view.
  */
+function renderLibrary() {
+  tableBodyOfBooks.innerHTML = '';
+  
+  for (let i = 0; i < myLibrary.length; i++) {
+    let book = myLibrary[i];
+    let row = tableBodyOfBooks.insertRow(-1);
+    
+    fillRow(book, row);
+  }
+};
 
 renderLibrary();
 
-function renderLibrary() {
-  tableBooks.innerHTML = '';
-
-  for (let i = 0; i < myLibrary.length; i++) {
-    let row = tableBooks.insertRow(-1);
-
-    fillRow(i, row);
-  }
-};
-
 /**
- * Function to create cells and fill with data and icons
+ * Function to create a row
+ * @param {object} book - the book
+ * @param {number} row - the table row HTML element
  */
-function fillRow(index, row) {
-  let book = myLibrary[index];
-  
-  for (let property in book) {
-    if (book.hasOwnProperty(property) && property == 'read') {
-      let newCell = row.insertCell(-1);
-      newCell.classList.add('read-column');
-      insertIcon(index, newCell, book[property]);
-    } else if (book.hasOwnProperty(property) && typeof book[property] != 'function') {
-      row.insertCell(-1).innerText = book[property];
+function fillRow(book, row) {
+  Object.keys(book).forEach((prop) => {
+    if (typeof prop == 'boolean') {
+      let cell = row.insertCell(-1);
+      cell.classList.add('read-column');
+      cell.innerText = book[prop];
     } else {
-      insertIcon(index, row.insertCell(-1), 'delete');
+      let cell = row.insertCell(-1);
+      cell.innerText = book[prop];
     }
-  }
+  });
+
+  Object.getOwnPropertyNames(Book.prototype).forEach((prop) => {
+    if (prop != 'constructor') {
+      insertIcon(row, row.insertCell(-1), 'delete');
+    }
+  });
 };
 
 /**
- * Functions related to icons
+ * Function to insert a created icon
+ * @param {number} rowIndex - the table's current row
+ * @param {object} currentCell - the table's current cell
+ * @param {string} type - the type of icon to insert
  */
 function insertIcon(rowIndex, currentCell, type) {
   let iconType = type.toString();
@@ -93,15 +107,21 @@ function insertIcon(rowIndex, currentCell, type) {
   defineIconAction(newIcon, iconType);
 };
 
+/**
+ * Function to create an icon
+ * @param {number} index - the table's current row
+ * @param {string} type - the icon type
+ * @return {HTML} - HMTL link element
+ */
 function createIcon(index, type) {
   let iconElement = document.createElement('a');
-  iconElement.setAttribute('data-book-index-delete', index);
+  iconElement.setAttribute(`data-book-index-${type}`, index);
   iconElement.classList.add('material-icons');
 
   defineIconType(iconElement, type);
 
   return iconElement;
-}
+};
 
 function defineIconType(newIcon, type) {
   switch (type) {
