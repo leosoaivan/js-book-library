@@ -17,12 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Classes
  */
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.toggleRead = function() {
+class Book {
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
+
+  toggleRead() {
     this.read = !this.read;
   };
 };
@@ -31,143 +34,113 @@ function Book(title, author, pages, read) {
  * Variables
  */
 let myLibrary = [];
-let book1 = new Book(
-  'The Fellowship of the Ring',
-  'J. R. R. Tolkien',
-  '479',
-  true
-);
+let book1 = new Book('The Fellowship of the Ring', 'J. R. R. Tolkien', '479', true);
 let book2 = new Book('The Two Towers', 'J. R. R. Tolkien', '415', true);
 let book3 = new Book('The Return of the King', 'J. R. R. Tolkien', '347', true);
 let book4 = new Book('The Silmarillion', 'J. R. R. Tolkien', '365', false);
 let bookForm = document.querySelector('#add-book-form');
-
-const tableBooks = document.getElementById('table-books');
-// const addBookSection = document.getElementById('add-book');
 
 myLibrary.push(book1, book2, book3, book4);
 
 /**
  * Function to output myLibrary to view.
  */
-
-renderLibrary();
-
 function renderLibrary() {
-  tableBooks.innerHTML = '';
-
+  let tableBodyOfBooks = document.getElementById('table-books');
+  tableBodyOfBooks.innerHTML = '';
+  
   for (let i = 0; i < myLibrary.length; i++) {
-    let row = tableBooks.insertRow(-1);
-
-    fillRow(i, row);
+    let book = myLibrary[i];
+    let row = tableBodyOfBooks.insertRow(-1);
+    
+    fillRow(i, book, row);
   }
 };
 
-/**
- * Function to create cells and fill with data and icons
- */
-function fillRow(index, row) {
-  let book = myLibrary[index];
-  
-  for (let property in book) {
-    if (book.hasOwnProperty(property) && property == 'read') {
-      let newCell = row.insertCell(-1);
-      newCell.classList.add('read-column');
-      insertIcon(index, newCell, book[property]);
-    } else if (book.hasOwnProperty(property) && typeof book[property] != 'function') {
-      row.insertCell(-1).innerText = book[property];
+function fillRow(index, book, row) {
+  Object.keys(book).forEach((prop) => {
+    let cell = row.insertCell(-1);
+
+    if (prop == 'read') {
+      cell.classList.add('read-column');
+      insertIcon(index, cell, book[prop]);
     } else {
-      insertIcon(index, row.insertCell(-1), 'delete');
+      cell.innerText = book[prop];
     }
-  }
+  });
+
+  Object.getOwnPropertyNames(Book.prototype).forEach((prop) => {
+    if (prop != 'constructor') {
+      let cell = row.insertCell(-1);
+      insertIcon(index, cell, 'delete');
+    }
+  });
 };
 
 /**
  * Functions related to icons
  */
-function insertIcon(rowIndex, currentCell, type) {
+function insertIcon(index, cell, type) {
   let iconType = type.toString();
-  let newIcon = createIcon(rowIndex, iconType);
+  let newIcon = createIcon(index, iconType);
   
-  currentCell.appendChild(newIcon);
-  defineIconAction(newIcon, iconType);
+  cell.appendChild(newIcon);
 };
 
 function createIcon(index, type) {
-  let iconElement = document.createElement('a');
-  iconElement.setAttribute('data-book-index-delete', index);
-  iconElement.classList.add('material-icons');
+  let icon = document.createElement('a');
+  
+  icon.setAttribute('data-book-index', index);
+  setStyle(icon, type);
 
-  defineIconType(iconElement, type);
+  return icon;
+};
 
-  return iconElement;
-}
-
-function defineIconType(newIcon, type) {
+function setStyle(icon, type) {
   switch (type) {
     case 'delete':
-      newIcon.classList.add('delete');
-      newIcon.innerHTML = type;
+      icon.classList.add('material-icons', 'delete');
+      icon.innerHTML = 'delete';
+      icon.addEventListener('click', function() {
+        deleteBook(icon);
+      });
       break;
     case 'true':
-      newIcon.classList.add('check');
-      newIcon.innerHTML = 'check';
+      icon.classList.add('material-icons', 'check');
+      icon.innerHTML = 'check';
+      icon.addEventListener('click', function() {
+        toggleRead(icon);
+      });
       break;
     case 'false':
-      newIcon.classList.add('clear');
-      newIcon.innerHTML = 'clear';
+      icon.classList.add('material-icons', 'clear');
+      icon.innerHTML = 'clear';
+      icon.addEventListener('click', function() {
+        toggleRead(icon);
+      });
       break;
   };
 }
 
-function defineIconAction(newIcon, type) {
-  newIcon.addEventListener('click', function() {
-    switch (type) {
-      case 'delete':
-        deleteBook(newIcon);
-        break;
-      case 'true':
-        toggleRead(newIcon);
-        break;
-      case 'false':
-        toggleRead(newIcon);
-        break;
-    }
-  });
-}
-
 function toggleRead(icon) {
+  let index = icon.dataset.bookIndex;
   let targetRow = icon.parentElement.parentElement;
-  let targetBookTitle = targetRow.firstChild.innerText;
-
-  let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
-  let bookToEdit = myLibrary[indexOfBookToEdit];
+  let book = myLibrary[index];
   
   targetRow.innerHTML = '';
-  bookToEdit.toggleRead();
+  book.toggleRead();
 
-  fillRow(indexOfBookToEdit, targetRow);
+  fillRow(index, book, targetRow);
 };
 
 function deleteBook(icon) {
-  let targetRow = icon.parentElement.parentElement;
-  let targetBookTitle = targetRow.firstChild.innerText;
+  let index = icon.dataset.bookIndex;
+  let book = myLibrary[index];
 
-  let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
-
-  if (confirm('Are you sure you want to delete this book?')) {
-    myLibrary.splice(indexOfBookToEdit, 1);
+  if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
+    myLibrary.splice(index, 1);
     renderLibrary();
   }
-}
-
-function findBookByAttr(attr, value) {
-  for (let i = 0; i < myLibrary.length; i += 1) {
-    if (myLibrary[i][attr] === value) {
-      return i;
-    }
-  }
-  return -1;
 }
 
 /**
@@ -180,7 +153,7 @@ cancelBookButton.onclick = function() {
 };
 
 /**
- * Obtain book parameters from form
+ * Obtain book parameters from form and add to myLibrary
  */
 let modal = document.querySelector('.modal');
 let createBookButton = document.querySelector('#add-book-form__submit');
@@ -204,7 +177,6 @@ function addBookToLibrary() {
   let newBookAuthor = this.form[1].value;
   let newBookPages = this.form[2].value;
   let newBookRead = this.form[3].checked;
-  
   let newBook = new Book(
     newBookTitle,
     newBookAuthor,
@@ -214,3 +186,5 @@ function addBookToLibrary() {
 
   myLibrary.push(newBook);
 };
+
+renderLibrary();

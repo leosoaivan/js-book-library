@@ -4,13 +4,13 @@ module.exports = {
     },
     "extends": "google",
     "rules": {
-        "require-jsdoc": "warn",
-        "valid-jsdoc": "warn",
+        "require-jsdoc": "off",
+        "valid-jsdoc": "off",
         "no-trailing-spaces": ["error", 
             {
                 "skipBlankLines": true
             }
         ],
-        "max-len": "warn"
+        "max-len": "off"
     }
 };
