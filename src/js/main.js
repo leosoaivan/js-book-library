@@ -84,6 +84,7 @@ function insertIcon(index, cell, type) {
   let iconType = type.toString();
   let newIcon = createIcon(index, iconType);
   
+  cell.innerHTML = '';
   cell.appendChild(newIcon);
 };
 
@@ -124,13 +125,11 @@ function setStyle(icon, type) {
 
 function toggleRead(icon) {
   let index = icon.dataset.bookIndex;
-  let targetRow = icon.parentElement.parentElement;
+  let targetCell = icon.parentElement;
   let book = myLibrary[index];
   
-  targetRow.innerHTML = '';
   book.toggleRead();
-
-  fillRow(index, book, targetRow);
+  insertIcon(index, targetCell, book.read);
 };
 
 function deleteBook(icon) {
