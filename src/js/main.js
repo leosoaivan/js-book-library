@@ -70,9 +70,8 @@ function fillRow(index, book, row) {
   });
 
   Object.getOwnPropertyNames(Book.prototype).forEach((prop) => {
-    let cell = row.insertCell(-1);
-
     if (prop != 'constructor') {
+      let cell = row.insertCell(-1);
       insertIcon(index, cell, 'delete');
     }
   });
