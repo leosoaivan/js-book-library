@@ -15,15 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Represents a book
+ * Classes
  */
 class Book {
-  /**
-   * @param {string} title
-   * @param {string} author
-   * @param {number} pages
-   * @param {boolean} read
-   */
   constructor(title, author, pages, read) {
     this.title = title;
     this.author = author;
@@ -31,9 +25,6 @@ class Book {
     this.read = read;
   }
 
-  /**
-   * Toggles if a book has been read
-   */
   toggleRead() {
     this.read = !this.read;
   };
@@ -49,14 +40,13 @@ let book3 = new Book('The Return of the King', 'J. R. R. Tolkien', '347', true);
 let book4 = new Book('The Silmarillion', 'J. R. R. Tolkien', '365', false);
 let bookForm = document.querySelector('#add-book-form');
 
-const tableBodyOfBooks = document.getElementById('table-books');
-
 myLibrary.push(book1, book2, book3, book4);
 
 /**
  * Function to output myLibrary to view.
  */
 function renderLibrary() {
+  let tableBodyOfBooks = document.getElementById('table-books');
   tableBodyOfBooks.innerHTML = '';
   
   for (let i = 0; i < myLibrary.length; i++) {
@@ -67,14 +57,6 @@ function renderLibrary() {
   }
 };
 
-renderLibrary();
-
-/**
- * Function to create a row
- * @param {number} index - the book's index in myLibrary
- * @param {object} book - the book
- * @param {HTML} row - the table row HTML element
- */
 function fillRow(index, book, row) {
   Object.keys(book).forEach((prop) => {
     let cell = row.insertCell(-1);
@@ -97,10 +79,7 @@ function fillRow(index, book, row) {
 };
 
 /**
- * Function to insert a created icon
- * @param {number} index - the book's index in myLibrary
- * @param {object} cell - the table's cell
- * @param {string} type - the type of icon to insert
+ * Functions related to icons
  */
 function insertIcon(index, cell, type) {
   let iconType = type.toString();
@@ -109,25 +88,15 @@ function insertIcon(index, cell, type) {
   cell.appendChild(newIcon);
 };
 
-/**
- * Function to create an icon
- * @param {number} index - the current
- * @param {string} type - the icon type
- * @return {HTML} - HMTL link element
- */
 function createIcon(index, type) {
   let icon = document.createElement('a');
+  
   icon.setAttribute('data-book-index', index);
-
   setStyle(icon, type);
 
   return icon;
 };
 
-/**
- * @param {HTML} icon - The HTML element being styled
- * @param {string} type - The type of icon being created
- */
 function setStyle(icon, type) {
   switch (type) {
     case 'delete':
@@ -154,9 +123,6 @@ function setStyle(icon, type) {
   };
 }
 
-/**
- * @param {HTML} icon - Link element of the icon
- */
 function toggleRead(icon) {
   let index = icon.dataset.bookIndex;
   let targetRow = icon.parentElement.parentElement;
@@ -168,9 +134,6 @@ function toggleRead(icon) {
   fillRow(index, book, targetRow);
 };
 
-/**
- * @param {HTML} icon
- */
 function deleteBook(icon) {
   let index = icon.dataset.bookIndex;
   let book = myLibrary[index];
@@ -191,7 +154,7 @@ cancelBookButton.onclick = function() {
 };
 
 /**
- * Obtain book parameters from form
+ * Obtain book parameters from form and add to myLibrary
  */
 let modal = document.querySelector('.modal');
 let createBookButton = document.querySelector('#add-book-form__submit');
@@ -215,7 +178,6 @@ function addBookToLibrary() {
   let newBookAuthor = this.form[1].value;
   let newBookPages = this.form[2].value;
   let newBookRead = this.form[3].checked;
-  
   let newBook = new Book(
     newBookTitle,
     newBookAuthor,
@@ -225,3 +187,5 @@ function addBookToLibrary() {
 
   myLibrary.push(newBook);
 };
+
+renderLibrary();
