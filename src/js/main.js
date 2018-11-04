@@ -71,9 +71,9 @@ renderLibrary();
 
 /**
  * Function to create a row
- * @param {number} index - the books' index in myLibrary
+ * @param {number} index - the book's index in myLibrary
  * @param {object} book - the book
- * @param {number} row - the table row HTML element
+ * @param {HTML} row - the table row HTML element
  */
 function fillRow(index, book, row) {
   Object.keys(book).forEach((prop) => {
@@ -98,16 +98,15 @@ function fillRow(index, book, row) {
 
 /**
  * Function to insert a created icon
- * @param {number} rowIndex - the table's current row
- * @param {object} currentCell - the table's current cell
+ * @param {number} index - the book's index in myLibrary
+ * @param {object} cell - the table's cell
  * @param {string} type - the type of icon to insert
  */
-function insertIcon(rowIndex, currentCell, type) {
+function insertIcon(index, cell, type) {
   let iconType = type.toString();
-  let newIcon = createIcon(rowIndex, iconType);
+  let newIcon = createIcon(index, iconType);
   
-  currentCell.appendChild(newIcon);
-  defineIconAction(newIcon, iconType);
+  cell.appendChild(newIcon);
 };
 
 /**
@@ -117,80 +116,69 @@ function insertIcon(rowIndex, currentCell, type) {
  * @return {HTML} - HMTL link element
  */
 function createIcon(index, type) {
-  let iconElement = document.createElement('a');
-  iconElement.setAttribute(`data-book-index-${type}`, index);
-  iconElement.classList.add('material-icons');
+  let icon = document.createElement('a');
+  icon.setAttribute('data-book-index', index);
 
-  defineIconType(iconElement, type);
+  setStyle(icon, type);
 
-  return iconElement;
+  return icon;
 };
 
-function defineIconType(newIcon, type) {
+/**
+ * @param {HTML} icon - The HTML element being styled
+ * @param {string} type - The type of icon being created
+ */
+function setStyle(icon, type) {
   switch (type) {
     case 'delete':
-      newIcon.classList.add('delete');
-      newIcon.innerHTML = type;
+      icon.classList.add('material-icons', 'delete');
+      icon.innerHTML = 'delete';
+      icon.addEventListener('click', function() {
+        deleteBook(icon);
+      });
       break;
     case 'true':
-      newIcon.classList.add('check');
-      newIcon.innerHTML = 'check';
+      icon.classList.add('material-icons', 'check');
+      icon.innerHTML = 'check';
+      icon.addEventListener('click', function() {
+        toggleRead(icon);
+      });
       break;
     case 'false':
-      newIcon.classList.add('clear');
-      newIcon.innerHTML = 'clear';
+      icon.classList.add('material-icons', 'clear');
+      icon.innerHTML = 'clear';
+      icon.addEventListener('click', function() {
+        toggleRead(icon);
+      });
       break;
   };
 }
 
-function defineIconAction(newIcon, type) {
-  newIcon.addEventListener('click', function() {
-    switch (type) {
-      case 'delete':
-        deleteBook(newIcon);
-        break;
-      case 'true':
-        toggleRead(newIcon);
-        break;
-      case 'false':
-        toggleRead(newIcon);
-        break;
-    }
-  });
-}
-
+/**
+ * @param {HTML} icon - Link element of the icon
+ */
 function toggleRead(icon) {
+  let index = icon.dataset.bookIndex;
   let targetRow = icon.parentElement.parentElement;
-  let targetBookTitle = targetRow.firstChild.innerText;
-
-  let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
-  let bookToEdit = myLibrary[indexOfBookToEdit];
+  let book = myLibrary[index];
   
   targetRow.innerHTML = '';
-  bookToEdit.toggleRead();
+  book.toggleRead();
 
-  fillRow(indexOfBookToEdit, targetRow);
+  fillRow(index, book, targetRow);
 };
 
+/**
+ * @param {HTML} icon
+ */
 function deleteBook(icon) {
-  let targetRow = icon.parentElement.parentElement;
-  let targetBookTitle = targetRow.firstChild.innerText;
+  let index = icon.dataset.bookIndex;
+  let book = myLibrary[index];
 
-  let indexOfBookToEdit = findBookByAttr('title', targetBookTitle);
-
-  if (confirm('Are you sure you want to delete this book?')) {
-    myLibrary.splice(indexOfBookToEdit, 1);
+  if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
+    myLibrary.splice(index, 1);
     renderLibrary();
   }
-}
-
-function findBookByAttr(attr, value) {
-  for (let i = 0; i < myLibrary.length; i += 1) {
-    if (myLibrary[i][attr] === value) {
-      return i;
-    }
-  }
-  return -1;
 }
 
 /**
